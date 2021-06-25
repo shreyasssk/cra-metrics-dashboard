@@ -1,0 +1,20 @@
+{
+  "name": "node-resource",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js",
+    "start:dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "node-schedule": "^2.0.0",
+    "os-utils": "^0.0.14",
+    "pidusage": "^2.0.21",
+    "process-list": "^2.0.0",
+    "shelljs": "^0.8.4"
+  }
+}
