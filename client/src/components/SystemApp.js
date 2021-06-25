@@ -3,7 +3,6 @@ import { Container, Row, Col, Card } from 'shards-react';
 
 import CpuGraph from './system/CpuGraph';
 import MemoryGraph from './system/MemoryGraph';
-import SideBar from './Sidebar';
 import system from '../api/system';
 
 const Dashboard = () => {
@@ -35,7 +34,6 @@ const Dashboard = () => {
 
 	return (
 		<Container fluid className="main-content-container px-4">
-			<SideBar />
 			<br />
 			<Row>
 				<Col className="col-lg mb-4">

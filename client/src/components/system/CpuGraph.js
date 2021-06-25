@@ -9,6 +9,7 @@ class CpuData extends Component {
 		super(props);
 
 		this.state = {
+			graphData: '',
 			options: {
 				chart: {
 					id: 'cpugraph',
@@ -56,9 +57,10 @@ class CpuData extends Component {
 		this.updateInterval = setInterval(
 			() =>
 				system.get('/system-metrics').then((res) => {
-					const cpuData = res.data.cpu_usage;
+					const cpuData = Math.round(res.data.cpu_usage * 100);
+					this.setState({ graphData: cpuData });
 
-					this.updateData(Math.round(cpuData * 100));
+					this.updateData(cpuData);
 				}),
 			1000
 		);
@@ -91,25 +93,42 @@ class CpuData extends Component {
 	};
 
 	render() {
-		const { options, series } = this.state;
+		const { options, series, graphData } = this.state;
+
+		if (graphData === 0) {
+			return (
+				<div>
+					<h1>Oops...</h1>
+					<h4>No data fetched</h4>
+				</div>
+			);
+		}
+
+		if (graphData !== 0) {
+			return (
+				<div>
+					<Chart
+						options={options}
+						series={series}
+						type="line"
+						height="350"
+					/>
+					<div style={{ paddingLeft: '5px' }}>
+						{' '}
+						<button
+							className="mb-2 mr-1 btn btn-primary"
+							onClick={this.resetData}
+						>
+							Reset
+						</button>
+					</div>
+				</div>
+			);
+		}
 
 		return (
 			<div>
-				<Chart
-					options={options}
-					series={series}
-					type="line"
-					height="350"
-				/>
-				<div style={{ paddingLeft: '5px' }}>
-					{' '}
-					<button
-						className="mb-2 mr-1 btn btn-primary"
-						onClick={this.resetData}
-					>
-						Reset
-					</button>
-				</div>
+				<h4>Loading...</h4>
 			</div>
 		);
 	}

@@ -9,6 +9,7 @@ class MemoryData extends Component {
 		super(props);
 
 		this.state = {
+			graphData: '',
 			options: {
 				chart: {
 					id: 'memgraph',
@@ -57,8 +58,8 @@ class MemoryData extends Component {
 			() =>
 				system.get('/system-metrics').then((res) => {
 					const memData = res.data.free_memory;
-					console.log(memData);
 
+					this.setState({ graphData: Math.round(memData) });
 					this.updateData(Math.round(memData));
 				}),
 			1000
@@ -97,25 +98,42 @@ class MemoryData extends Component {
 	};
 
 	render() {
-		const { options, series } = this.state;
+		const { options, series, graphData } = this.state;
+
+		if (graphData === 0) {
+			return (
+				<div>
+					<h1>Oops...</h1>
+					<h4>No data fetched</h4>
+				</div>
+			);
+		}
+
+		if (graphData !== 0) {
+			return (
+				<div className="mixed-chart">
+					<Chart
+						options={options}
+						series={series}
+						type="line"
+						height="350"
+					/>
+					<div style={{ paddingLeft: '5px' }}>
+						{' '}
+						<button
+							className="mb-2 mr-1 btn btn-primary"
+							onClick={this.resetData}
+						>
+							Reset
+						</button>
+					</div>
+				</div>
+			);
+		}
 
 		return (
-			<div className="mixed-chart">
-				<Chart
-					options={options}
-					series={series}
-					type="line"
-					height="350"
-				/>
-				<div style={{ paddingLeft: '5px' }}>
-					{' '}
-					<button
-						className="mb-2 mr-1 btn btn-primary"
-						onClick={this.resetData}
-					>
-						Reset
-					</button>
-				</div>
+			<div>
+				<h4>Loading...</h4>
 			</div>
 		);
 	}
