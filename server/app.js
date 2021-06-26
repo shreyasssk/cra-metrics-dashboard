@@ -2,13 +2,13 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 const app = express();
+const path = require('path');
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-	res.send('Hello World!');
+	res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.use('/system-metrics', require('./routes/os-utils'));
