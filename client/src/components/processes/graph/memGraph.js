@@ -103,8 +103,7 @@ class ProcessMemGraph extends React.Component {
 
 		return (
 			<div className="mixed-chart">
-				<h1>{processData.name}</h1>
-				<h1>Hello</h1>
+				<h2>{processData.name}</h2>
 				<Chart
 					options={options}
 					series={series}

@@ -48,31 +48,45 @@ class ProcessList extends React.Component {
 	};
 
 	render() {
-		return (
-			<div style={{ overflowX: 'auto' }}>
-				<div className="table-responsive">
-					<table className="table table-fixed">
-						<thead className="thead-dark">
-							<tr>
-								<th scope="col" className="col-3">
-									name
-								</th>
-								<th scope="col" className="col-3">
-									cpu
-								</th>
-								<th scope="col" className="col-3">
-									memory
-								</th>
-								<th scope="col" className="col-3">
-									pid
-								</th>
-							</tr>
-						</thead>
-						<tbody>{this.getRowData()}</tbody>
-					</table>
+		const x = this.state.data;
+
+		if (x.length !== 0) {
+			return (
+				<div style={{ overflowX: 'auto' }}>
+					<h4>Running Process List :</h4>
+					<div className="table-responsive">
+						<table className="table table-fixed">
+							<thead className="thead-dark">
+								<tr>
+									<th scope="col" className="col-3">
+										name
+									</th>
+									<th scope="col" className="col-3">
+										cpu
+									</th>
+									<th scope="col" className="col-3">
+										memory
+									</th>
+									<th scope="col" className="col-3">
+										pid
+									</th>
+								</tr>
+							</thead>
+							<tbody>{this.getRowData()}</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-		);
+			);
+		}
+
+		if (x.length === 0) {
+			return (
+				<div>
+					<h1>Loading...</h1>
+					<h2>Please wait fetching data...</h2>
+				</div>
+			);
+		}
 	}
 }
 

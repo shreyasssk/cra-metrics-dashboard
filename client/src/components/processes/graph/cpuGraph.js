@@ -35,7 +35,7 @@ class ProcessCpuGraph extends React.Component {
 					curve: 'smooth',
 				},
 				title: {
-					text: 'Free CPU [5] ',
+					text: 'Free CPU [%] ',
 					align: 'left',
 				},
 				markers: {
@@ -103,8 +103,7 @@ class ProcessCpuGraph extends React.Component {
 
 		return (
 			<div className="mixed-chart">
-				<h1>{processData.name}</h1>
-				<h1>Hello</h1>
+				<h2>{processData.name}</h2>
 				<Chart
 					options={options}
 					series={series}
