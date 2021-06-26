@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Chart from 'react-apexcharts';
 import ApexCharts from 'apexcharts';
 
-import system from '../../api/system';
+import system from '../../../api/system';
 
-class CpuProcessData extends Component {
+class ProcessMemGraph extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			memData: '',
 			options: {
 				chart: {
-					id: 'cpugraph',
+					id: 'memgraph',
 					animations: {
 						enabled: true,
 						easing: 'linear',
@@ -34,7 +35,7 @@ class CpuProcessData extends Component {
 					curve: 'smooth',
 				},
 				title: {
-					text: 'Cpu Utilization [Total %]',
+					text: 'Free Memory [MiB] ',
 					align: 'left',
 				},
 				markers: {
@@ -48,29 +49,26 @@ class CpuProcessData extends Component {
 					show: false,
 				},
 			},
-			series: [{ name: 'x', data: [] }],
+			series: [{ name: 'freemem', data: [] }],
 		};
 	}
 
 	getProps() {
-		const { graphData } = this.props;
-		this.setState({ pid: graphData });
-		const x = this.state.pid;
-		if (graphData !== 0 || undefined) {
-			system.get(`/node-metrics/${x}`).then((res) => {
-				const xData = res.data[0].pmem;
-				const pidData = xData / 1000;
-
-				this.updateData(Math.round(pidData));
-				console.log('Mem', pidData);
-			});
+		const { processData } = this.props;
+		if (processData.length !== 0) {
+			(async () => {
+				const { data } = await system.get(
+					`/process-list/${processData.pid}`
+				);
+				const x = Math.round(data[0].pmem / 1000).toFixed(2);
+				this.updateData(x);
+				console.log('Data: ', x);
+			})();
 		}
 	}
 
 	componentDidMount() {
-		this.updateInterval = setInterval(() => {
-			this.getProps();
-		}, 1000);
+		this.updateInterval = setInterval(() => this.getProps(), 1000);
 	}
 
 	componentWillUnmount() {
@@ -92,7 +90,7 @@ class CpuProcessData extends Component {
 		data.push({ x, y });
 
 		this.setState({ series: [{ data }] }, () => {
-			ApexCharts.exec('cpugraph', 'updateSeries', this.state.series);
+			ApexCharts.exec('memgraph', 'updateSeries', this.state.series);
 		});
 
 		// stop data array from leaking memory and growing too big
@@ -101,9 +99,12 @@ class CpuProcessData extends Component {
 
 	render() {
 		const { options, series } = this.state;
+		const { processData } = this.props;
 
 		return (
-			<div>
+			<div className="mixed-chart">
+				<h1>{processData.name}</h1>
+				<h1>Hello</h1>
 				<Chart
 					options={options}
 					series={series}
@@ -124,4 +125,4 @@ class CpuProcessData extends Component {
 	}
 }
 
-export default CpuProcessData;
+export default ProcessMemGraph;

@@ -14,7 +14,11 @@ class ProcessList extends React.Component {
 	componentDidMount() {
 		setInterval(async () => {
 			await system.get('/process-list').then((res) => {
-				this.setState({ data: res.data });
+				try {
+					this.setState({ data: res.data });
+				} catch (err) {
+					console.log('ProcessList.js', err);
+				}
 			});
 		}, 1000);
 	}
@@ -26,10 +30,10 @@ class ProcessList extends React.Component {
 			return (
 				<tr key={i.pid}>
 					<th className="col-3">{i.name}</th>
-					<td className="col-3">{i.pid}</td>
-					<td className="col-3">{i.ppid}</td>
+					<td className="col-3">{i.cpu}</td>
+					<td className="col-3">{i.pmem}</td>
 					<td className="col-3">
-						{i.threads}
+						{i.pid}
 						<button
 							type="button"
 							className="btn table-button btn-dark btn-sm"
@@ -45,7 +49,7 @@ class ProcessList extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{ overflowX: 'auto' }}>
 				<div className="table-responsive">
 					<table className="table table-fixed">
 						<thead className="thead-dark">
@@ -54,13 +58,13 @@ class ProcessList extends React.Component {
 									name
 								</th>
 								<th scope="col" className="col-3">
+									cpu
+								</th>
+								<th scope="col" className="col-3">
+									memory
+								</th>
+								<th scope="col" className="col-3">
 									pid
-								</th>
-								<th scope="col" className="col-3">
-									ppid
-								</th>
-								<th scope="col" className="col-3">
-									threads
 								</th>
 							</tr>
 						</thead>
