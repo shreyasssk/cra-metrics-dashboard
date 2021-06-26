@@ -1,3 +1,8 @@
+.table {
+    overflow-x: auto;
+    overflow: scroll;
+}
+
 .table-fixed tbody {
     height: 300px;
     overflow-y: auto;

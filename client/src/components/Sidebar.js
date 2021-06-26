@@ -27,9 +27,6 @@ class SideBarNav extends React.Component {
 						<Link to="/system">
 							<li className="nav-item nav-link">System</li>
 						</Link>
-						<Link to="/react-app">
-							<li className="nav-item nav-link">React App</li>
-						</Link>
 						<Link to="/process">
 							<li className="nav-item nav-link">Process</li>
 						</Link>

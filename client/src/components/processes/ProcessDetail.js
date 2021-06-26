@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import system from '../../api/system';
 
 const ProcessDetail = ({ processData }) => {
-	console.log(processData);
+	const [processDetails, setProcessDetails] = useState('');
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const { data } = await system.get(
+				`/process-list/${processData.pid}`
+			);
+			setProcessDetails(data[0]);
+		};
+		const timeoutID = setInterval(() => {
+			if (processData.length !== 0) {
+				fetchData();
+			}
+		}, 1000);
+
+		return () => {
+			clearInterval(timeoutID);
+		};
+	}, [processData]);
 
 	if (processData.length === 0) {
 		return (
@@ -26,9 +45,9 @@ const ProcessDetail = ({ processData }) => {
 					CMDLINE: {processData.cmdline} <br />
 					UPTIME: {processData.utime} <br />
 					<span style={{ fontWeight: 'bold' }}>
-						VIRTUAL MEMORY: {processData.vmem} <br />
-						PHYSICAL MEMORY: {processData.pmem} <br />
-						CPU: {processData.cpu} <br />
+						MEMORY: {Math.round(processDetails.pmem / 1000)} kB{' '}
+						<br />
+						CPU: {processDetails.cpu} % <br />
 					</span>
 				</p>
 			</div>

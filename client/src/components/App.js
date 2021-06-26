@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 
 import Dashboard from './SystemApp';
-import ReactApp from './ReactApp';
 import ProcessApp from './ProcessApp';
 
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
 						<Redirect to="/system" />
 					</Route>
 					<Route path="/system" component={Dashboard} />
-					<Route path="/react-app" component={ReactApp} />
 					<Route path="/process" component={ProcessApp} />
 				</Switch>
 			</Router>

@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Chart from 'react-apexcharts';
 import ApexCharts from 'apexcharts';
 
-import system from '../../api/system';
+import system from '../../../api/system';
 
-class MemoryData extends Component {
+class ProcessCpuGraph extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			memData: '',
 			options: {
 				chart: {
-					id: 'memgraph',
+					id: 'cpugraph',
 					animations: {
 						enabled: true,
 						easing: 'linear',
@@ -34,7 +35,7 @@ class MemoryData extends Component {
 					curve: 'smooth',
 				},
 				title: {
-					text: 'Free Memory [MiB] ',
+					text: 'Free CPU [%] ',
 					align: 'left',
 				},
 				markers: {
@@ -52,16 +53,22 @@ class MemoryData extends Component {
 		};
 	}
 
-	componentDidMount() {
-		this.updateInterval = setInterval(
-			() =>
-				system.get('/system-metrics').then((res) => {
-					const memData = res.data.free_memory;
+	getProps() {
+		const { processData } = this.props;
+		if (processData.length !== 0) {
+			(async () => {
+				const { data } = await system.get(
+					`/process-list/${processData.pid}`
+				);
+				const x = Math.round(data[0].cpu).toFixed(2);
+				this.updateData(x);
+				console.log('Cpu: ', x);
+			})();
+		}
+	}
 
-					this.updateData(Math.round(memData));
-				}),
-			1000
-		);
+	componentDidMount() {
+		this.updateInterval = setInterval(() => this.getProps(), 1000);
 	}
 
 	componentWillUnmount() {
@@ -83,7 +90,7 @@ class MemoryData extends Component {
 		data.push({ x, y });
 
 		this.setState({ series: [{ data }] }, () => {
-			ApexCharts.exec('memgraph', 'updateSeries', this.state.series);
+			ApexCharts.exec('cpugraph', 'updateSeries', this.state.series);
 		});
 
 		// stop data array from leaking memory and growing too big
@@ -92,9 +99,11 @@ class MemoryData extends Component {
 
 	render() {
 		const { options, series } = this.state;
+		const { processData } = this.props;
 
 		return (
 			<div className="mixed-chart">
+				<h2>{processData.name}</h2>
 				<Chart
 					options={options}
 					series={series}
@@ -115,4 +124,4 @@ class MemoryData extends Component {
 	}
 }
 
-export default MemoryData;
+export default ProcessCpuGraph;

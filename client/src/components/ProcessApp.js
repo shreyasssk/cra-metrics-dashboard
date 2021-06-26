@@ -1,9 +1,13 @@
 import React from 'react';
-import { Container, Row, Col } from 'shards-react';
+import { Container, Row, Col, Card } from 'shards-react';
 
 import SideBarNav from './Sidebar';
 import ProcessList from './processes/ProcessList';
 import ProcessDetail from './processes/ProcessDetail';
+
+// Graph Imports
+import ProcessMemGraph from './processes/graph/memGraph';
+import ProcessCpuGraph from './processes/graph/cpuGraph';
 
 class ProcessApp extends React.Component {
 	state = { processInfo: [] };
@@ -34,9 +38,6 @@ class ProcessApp extends React.Component {
 						<div style={{ padding: '5px' }}>
 							<div className="card">
 								<div className="card-body">
-									<h4 className="card-title">
-										Running Process List :
-									</h4>
 									<ProcessList
 										onProcessSelect={this.onProcessSelect}
 									/>
@@ -56,6 +57,44 @@ class ProcessApp extends React.Component {
 						</div>
 					</Col>
 				</Row>
+
+				{this.state.processInfo.length !== 0 ? (
+					<Row>
+						<Col lg="6" md="6" sm="12" className="mb-4">
+							<Card>
+								<div style={{ padding: '10px' }}>
+									<ProcessMemGraph
+										processData={this.state.processInfo}
+									/>
+								</div>
+							</Card>
+						</Col>
+						<Col lg="6" md="6" sm="12" className="mb-4">
+							<Card>
+								<div style={{ padding: '10px' }}>
+									<ProcessCpuGraph
+										processData={this.state.processInfo}
+									/>
+								</div>
+							</Card>
+						</Col>
+					</Row>
+				) : (
+					<Row>
+						<Col lg="12" md="12" sm="12" className="mb-8">
+							<Card>
+								<div style={{ padding: '10px' }}>
+									<br />
+									<h1>
+										Please select a process to plot the
+										graph
+									</h1>
+									<br />
+								</div>
+							</Card>
+						</Col>
+					</Row>
+				)}
 			</Container>
 		);
 	}
