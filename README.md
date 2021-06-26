@@ -1,2 +1,2 @@
-# cra-metrics-dashboard
-A Realtime Dashboard to view metrics of system hardware
+# Metrics Dashboard
+A Realtime Dashboard to view metrics of system hardware follows a monolithic architecture.
