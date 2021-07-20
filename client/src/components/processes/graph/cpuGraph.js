@@ -62,7 +62,6 @@ class ProcessCpuGraph extends React.Component {
 				);
 				const x = Math.round(data[0].cpu).toFixed(2);
 				this.updateData(x);
-				console.log('Cpu: ', x);
 			})();
 		}
 	}

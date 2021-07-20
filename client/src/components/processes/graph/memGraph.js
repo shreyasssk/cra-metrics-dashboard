@@ -62,7 +62,6 @@ class ProcessMemGraph extends React.Component {
 				);
 				const x = Math.round(data[0].pmem / 1000).toFixed(2);
 				this.updateData(x);
-				console.log('Data: ', x);
 			})();
 		}
 	}
