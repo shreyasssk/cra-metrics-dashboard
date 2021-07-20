@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Form, Button } from 'shards-react';
 import system from '../../api/system';
 
 const ProcessDetail = ({ processData }) => {
@@ -21,6 +22,17 @@ const ProcessDetail = ({ processData }) => {
 			clearInterval(timeoutID);
 		};
 	}, [processData]);
+
+	const onFormSubmit = async (e) => {
+		var pidValue = e.target.value;
+		const terminateProcess = async () => {
+			const { data } = await system.get(`/terminate/${pidValue}`);
+			window.location.reload();
+			console.log(data);
+		};
+		terminateProcess();
+		console.log(pidValue);
+	};
 
 	if (processData.length === 0) {
 		return (
@@ -50,6 +62,14 @@ const ProcessDetail = ({ processData }) => {
 						CPU: {processDetails.cpu} % <br />
 					</span>
 				</p>
+				<Button
+					onClick={onFormSubmit}
+					value={processData.pid}
+					size="lg"
+					theme="danger"
+				>
+					kill
+				</Button>
 			</div>
 		</div>
 	);
