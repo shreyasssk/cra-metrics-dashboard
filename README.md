@@ -6,6 +6,7 @@ A Realtime Dashboard to view metrics of system hardware.
 - System Dashboard to view CPU and Memory consumption
 - Process Dashboard to check all the processes running in the system
 - CPU and Memory usage visualization of each process
+- Termination of process
 - Stateless Application (non-persistent storage)
 - Support for Cross-Platform
 
@@ -13,6 +14,7 @@ A Realtime Dashboard to view metrics of system hardware.
 - Node.js (Express)
 - React.js
 - ApexCharts
+- Shards (UI)
 
 ### System Dashboard:
 ![System Dashboard](https://github.com/shreyasssk/image-reference/blob/master/system-dashboard.gif)
